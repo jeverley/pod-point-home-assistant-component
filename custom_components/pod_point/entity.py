@@ -299,14 +299,23 @@ class PodPointEntity(CoordinatorEntity):
         return self.__pod_image(self.model)
 
     @property
-    def connected(self) -> bool:
-        """Returns true if pod is connected to a vehicle"""
-        status = self.extra_state_attributes.get(ATTR_STATE, "")
-        return status in (
-            CHARGING_FLAG,
-            ATTR_STATE_CONNECTED_WAITING,
-            ATTR_STATE_SUSPENDED_EV,
-            ATTR_STATE_SUSPENDED_EVSE,
+    def connected(self) -> bool | None:
+        """Return True if pod is connected to a vehicle, None (unknown) if it is offline."""
+        if not self.online:
+            return None
+        return any(
+            status.key_name in {ATTR_STATE_CHARGING, ATTR_STATE_SUSPENDED_EV}
+            for status in self.pod.statuses
+        )
+
+    @property
+    def online(self) -> bool:
+        """Return True if pod is online."""
+        if self.pod is None or self.pod.connectivity_status is None:
+            return False
+        return (
+            self.pod.connectivity_status.connectivity_status
+            == ATTR_CONNECTION_STATE_ONLINE
         )
 
     @staticmethod
