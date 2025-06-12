@@ -14,6 +14,7 @@ from podpointclient.schedule import Schedule
 
 from .const import (
     APP_IMAGE_URL_BASE,
+    ATTR_CONNECTION_STATE_ONLINE,
     ATTR_STATE,
     ATTR_STATE_AVAILABLE,
     ATTR_STATE_CHARGING,
@@ -25,7 +26,6 @@ from .const import (
     ATTR_STATE_SUSPENDED_EVSE,
     ATTR_STATE_WAITING,
     ATTRIBUTION,
-    CHARGING_FLAG,
     DOMAIN,
     NAME,
 )
